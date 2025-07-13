@@ -1,0 +1,17 @@
+name: Sync to Kaggle
+on: push  # Triggers on every git push
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4  # Check out your repo
+      - name: Install Kaggle API
+        run: pip install kaggle
+      - name: Set up Kaggle credentials
+        run: |
+          mkdir -p ~/.kaggle
+          echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json  # Lock permissions
+      - name: Push to Kaggle
+        run: |
+          kaggle kernels push -p ./path/to/test
